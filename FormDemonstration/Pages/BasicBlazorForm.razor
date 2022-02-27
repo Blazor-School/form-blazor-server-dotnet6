@@ -1,0 +1,18 @@
+﻿@page "/basic-blazor-form"
+@using FormDemonstration.FormModels
+@inject IJSRuntime JS
+
+<h3>BasicBlazorForm</h3>
+<EditForm Model="FormModel" OnSubmit="SubmitForm">
+    <InputText @bind-Value="FormModel.ExampleString" />
+    <button class="btn btn-primary">Submit</button>
+</EditForm>
+
+@code {
+    public BasicBlazorFormModel FormModel { get; set; } = new();
+
+    public void SubmitForm()
+    {
+        JS.InvokeVoidAsync("alert", "Form submitted!");
+    }
+}

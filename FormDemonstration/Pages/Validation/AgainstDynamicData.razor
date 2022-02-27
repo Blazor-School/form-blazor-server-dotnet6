@@ -1,0 +1,64 @@
+﻿@page "/validation-against-dynamic-data"
+@using FormDemonstration.FormModels.Validation
+@implements IDisposable
+
+<h3>AgainstDynamicData</h3>
+<EditForm EditContext="FormContext">
+    <DataAnnotationsValidator />
+    <ValidationSummary Model="FormModel"/>
+    <div>
+        <label>
+            Allow text?
+            <InputRadioGroup @bind-Value="FormModel.AllowText">
+                <label>
+                    <InputRadio Value="true" />
+                    True
+                </label>
+                <label>
+                    <InputRadio Value="false" />
+                    False
+                </label>
+            </InputRadioGroup>
+        </label>
+    </div>
+    <div>
+        <label>
+            Text
+            <InputText @bind-Value="FormModel.Text"/>
+        </label>
+        <ValidationMessage For="() => FormModel.Text" />
+    </div>
+    <button class="btn btn-primary">Submit</button>
+</EditForm>
+
+@code {
+    private static AgainstDynamicDataFormModel _formModel = new();
+    private static EditContext _formContext = new(_formModel);
+    private static ValidationMessageStore _validationMessageStore = new(_formContext);
+    public EditContext FormContext { get => _formContext; set => _formContext = value; }
+    public AgainstDynamicDataFormModel FormModel { get => _formModel; set => _formModel = value; }
+    public ValidationMessageStore ValidationMessageStore { get => _validationMessageStore; set => _validationMessageStore = value; }
+
+    protected override void OnInitialized()
+    {
+        FormContext.OnFieldChanged += OnFormContextFieldChanged;
+    }
+
+    public void OnFormContextFieldChanged(object? sender, FieldChangedEventArgs e)
+    {
+        ValidationMessageStore.Clear();
+
+        if (FormModel.AllowText is false && string.IsNullOrEmpty(FormModel.Text) is false)
+        {
+            ValidationMessageStore.Add(FormContext.Field(nameof(FormModel.Text)), "This message is for the field!");
+            ValidationMessageStore.Add(FormContext.Field(string.Empty), "This message is for the entire form!");
+        }
+
+        FormContext.Validate();
+    }
+
+    public void Dispose()
+    {
+        FormContext.OnFieldChanged -= OnFormContextFieldChanged;
+    }
+}
