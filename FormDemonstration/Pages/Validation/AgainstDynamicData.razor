@@ -32,15 +32,14 @@
 </EditForm>
 
 @code {
-    private static AgainstDynamicDataFormModel _formModel = new();
-    private static EditContext _formContext = new(_formModel);
-    private static ValidationMessageStore _validationMessageStore = new(_formContext);
-    public EditContext FormContext { get => _formContext; set => _formContext = value; }
-    public AgainstDynamicDataFormModel FormModel { get => _formModel; set => _formModel = value; }
-    public ValidationMessageStore ValidationMessageStore { get => _validationMessageStore; set => _validationMessageStore = value; }
+    public EditContext FormContext { get; set; } = null!;
+    public AgainstDynamicDataFormModel FormModel { get; set; } = new();
+    public ValidationMessageStore ValidationMessageStore { get; set; } = null!;
 
     protected override void OnInitialized()
     {
+        FormContext = new(FormModel);
+        ValidationMessageStore = new(FormContext);
         FormContext.OnFieldChanged += OnFormContextFieldChanged;
     }
 
@@ -54,7 +53,7 @@
             ValidationMessageStore.Add(FormContext.Field(string.Empty), "This message is for the entire form!");
         }
 
-        FormContext.Validate();
+        FormContext?.Validate();
     }
 
     public void Dispose()
