@@ -1,0 +1,29 @@
+﻿@page "/blazor-form-event"
+@using FormDemonstration.FormModels
+
+<h3>BlazorFormEvent</h3>
+<EditForm Model="FormModel" OnValidSubmit="ValidSubmit" OnInvalidSubmit="InvalidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <label>
+        Leave textbox empty to make validation error:
+        <InputText @bind-Value="FormModel.ExampleString" />
+    </label>
+    <button>Submit</button>
+</EditForm>
+@Log
+
+@code {
+    public BlazorFormEventFormModel FormModel { get; set; } = new();
+    public string Log { get; set; } = "";
+
+    public void InvalidSubmit()
+    {
+        Log += "OnInvalidSubmit fired. ";
+    }
+
+    public void ValidSubmit()
+    {
+        Log += "OnValidSubmit fired. ";
+    }
+}
