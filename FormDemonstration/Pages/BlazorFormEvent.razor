@@ -3,6 +3,7 @@
 
 <h3>BlazorFormEvent</h3>
 <EditForm Model="FormModel" OnValidSubmit="ValidSubmit" OnInvalidSubmit="InvalidSubmit">
+@*<EditForm Model="FormModel" OnSubmit="Submit">*@
     <DataAnnotationsValidator />
     <ValidationSummary />
     <label>
@@ -17,13 +18,18 @@
     public BlazorFormEventFormModel FormModel { get; set; } = new();
     public string Log { get; set; } = "";
 
-    public void InvalidSubmit()
+    public void InvalidSubmit(EditContext formContext)
     {
         Log += "OnInvalidSubmit fired. ";
     }
 
-    public void ValidSubmit()
+    public void ValidSubmit(EditContext formContext)
     {
         Log += "OnValidSubmit fired. ";
+    }
+
+    public void Submit(EditContext formContext)
+    {
+        Log += "OnSubmit fired. ";
     }
 }
