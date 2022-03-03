@@ -5,7 +5,8 @@
 <EditForm Model="FormModel" OnSubmit="Submit">
     <button class="btn btn-outline-success">Submit (button tag)</button>
     <input type="submit" class="btn btn-outline-success" value="Submit (input tag)" />
-    <button type="button" class="btn btn-outline-success" @onclick="Method1">Call Method</button>
+    <input type="button" class="btn btn-outline-success" @onclick="Method1" value="Call Method (input tag)" />
+    <button type="button" class="btn btn-outline-success" @onclick="Method1" value="">Call Method (button tag)</button>
     <button class="btn btn-outline-danger" @onclick="Method1">(Not Intended) Call Method & Submit</button>
 </EditForm>
 @((MarkupString)Log)
